@@ -3,6 +3,7 @@ import { DecoratorNames } from '../const/DecoratorNames';
 import { NotAComponentError } from '../errors/NotAComponentError';
 import { Input } from './Input';
 import { Output } from './Output';
+import { Nullable } from '../interfaces/Nullable';
 
 export class Component {
     public inputs: Array<Input>;
@@ -24,15 +25,19 @@ export class Component {
     }
 
     public static isComponent(element: ClassDefinition): boolean {
-        let hasComponentDecorator: boolean = false;
+        return !!this.getComponentDecorator(element);
+    }
+
+    private static getComponentDecorator(element: ClassDefinition): Nullable<DecoratorDefinition> {
+        let componentDecorator: Nullable<DecoratorDefinition> = null;
 
         element.decorators.forEach((decorator: DecoratorDefinition) => {
             if (decorator.name === DecoratorNames.COMPONENT) {
-                hasComponentDecorator = true;
+                componentDecorator = decorator;
             }
         });
 
-        return hasComponentDecorator;
+        return componentDecorator;
     }
 
     private static hasInputDecorator(property: ClassPropertyDefinition): boolean {

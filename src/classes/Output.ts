@@ -25,7 +25,7 @@ export class Output {
     }
 
     private static getInputDecorator(property: ClassPropertyDefinition): Nullable<DecoratorDefinition> {
-        let inputDecorator: DecoratorDefinition;
+        let inputDecorator: Nullable<DecoratorDefinition> = null;
 
         property.decorators.forEach((decorator: DecoratorDefinition) => {
             if (decorator.name === DecoratorNames.OUTPUT) {
