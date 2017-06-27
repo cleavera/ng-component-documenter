@@ -1,19 +1,48 @@
-import { ClassDefinition, ClassPropertyDefinition, DecoratorDefinition } from 'ts-type-info';
+import { ClassDefinition, ClassPropertyDefinition, DecoratorDefinition, ExpressionDefinition } from 'ts-type-info';
 import { DecoratorNames } from '../const/DecoratorNames';
 import { NotAComponentError } from '../errors/NotAComponentError';
+import { Nullable } from '../interfaces/Nullable';
 import { Input } from './Input';
 import { Output } from './Output';
-import { Nullable } from '../interfaces/Nullable';
+import { Template } from './Template';
 
 export class Component {
     public inputs: Array<Input>;
     public outputs: Array<Output>;
+    public template: Template;
+    public selector: string;
 
     protected constructor(element: ClassDefinition) {
         this.inputs = [];
         this.outputs = [];
+        const componentDecorator: Nullable<DecoratorDefinition> = Component.getComponentDecorator(element);
+
+        if (componentDecorator) {
+            this.selector = this.getSelector(componentDecorator);
+            this.template = Template.fromComponentDecorator(componentDecorator);
+        }
 
         this.parseAPI(element.properties);
+    }
+
+    private parseAPI(properties: Array<ClassPropertyDefinition>): void {
+        properties.forEach((property: ClassPropertyDefinition) => {
+            if (Component.hasInputDecorator(property)) {
+                this.inputs.push(new Input(property));
+            }
+
+            if (Component.hasOutputDecorator(property)) {
+                this.outputs.push(new Output(property));
+            }
+        });
+    }
+
+    private getSelector(componentDecorator: DecoratorDefinition): string {
+        const selectorRegex: RegExp = /^[\s\S]+selector: ['"`]([A-z0-9-]+)['"`][\s\S]+$/;
+
+        const arg: ExpressionDefinition = componentDecorator.arguments[0];
+
+        return arg.text.replace(selectorRegex, '$1');
     }
 
     public static fromClass(element: ClassDefinition): Component {
@@ -62,17 +91,5 @@ export class Component {
         });
 
         return hasOutputDecorator;
-    }
-
-    private parseAPI(properties: Array<ClassPropertyDefinition>): void {
-        properties.forEach((property: ClassPropertyDefinition) => {
-            if (Component.hasInputDecorator(property)) {
-                this.inputs.push(new Input(property));
-            }
-
-            if (Component.hasOutputDecorator(property)) {
-                this.outputs.push(new Output(property));
-            }
-        });
     }
 }
