@@ -1,5 +1,6 @@
 import { ClassDefinition, ClassPropertyDefinition, DecoratorDefinition } from 'ts-type-info';
 import { DecoratorNames } from '../const/DecoratorNames';
+import { NotAComponentError } from '../errors/NotAComponentError';
 import { Input } from './Input';
 import { Output } from './Output';
 
@@ -14,19 +15,11 @@ export class Component {
         this.parseAPI(element.properties);
     }
 
-    private parseAPI(properties: Array<ClassPropertyDefinition>) {
-        properties.forEach((property: ClassPropertyDefinition) => {
-            if (Component.hasInputDecorator(property)) {
-                this.inputs.push(new Input(property));
-            }
-
-            if (Component.hasOutputDecorator(property)) {
-                this.outputs.push(new Output(property));
-            }
-        });
-    }
-
     public static fromClass(element: ClassDefinition): Component {
+        if (!this.isComponent(element)) {
+            throw new NotAComponentError(element.name);
+        }
+
         return new Component(element);
     }
 
@@ -64,5 +57,17 @@ export class Component {
         });
 
         return hasOutputDecorator;
+    }
+
+    private parseAPI(properties: Array<ClassPropertyDefinition>): void {
+        properties.forEach((property: ClassPropertyDefinition) => {
+            if (Component.hasInputDecorator(property)) {
+                this.inputs.push(new Input(property));
+            }
+
+            if (Component.hasOutputDecorator(property)) {
+                this.outputs.push(new Output(property));
+            }
+        });
     }
 }

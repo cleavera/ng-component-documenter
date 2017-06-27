@@ -1,6 +1,6 @@
 import { ClassPropertyDefinition, DecoratorDefinition, ExpressionDefinition } from 'ts-type-info';
-import { Nullable } from '../interfaces/Nullable';
 import { DecoratorNames } from '../const/DecoratorNames';
+import { Nullable } from '../interfaces/Nullable';
 
 export class Input {
     public name: string;
@@ -12,7 +12,7 @@ export class Input {
 
     private static getName(property: ClassPropertyDefinition): string {
         let name: string = property.name;
-        let inputDecorator: Nullable<DecoratorDefinition> = this.getInputDecorator(property);
+        const inputDecorator: Nullable<DecoratorDefinition> = this.getInputDecorator(property);
 
         if (inputDecorator) {
             inputDecorator.arguments.forEach((argument: ExpressionDefinition) => {
