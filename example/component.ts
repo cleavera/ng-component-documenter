@@ -19,12 +19,18 @@ export class MyComponent implements OnInit {
     public input: any;
 
     @Input()
+    public stringInput: string;
+
+    @Input()
     public set myProperty(value: string) {
         this._myProperty = value;
     }
 
     @Output()
     public output: EventEmitter<void>;
+
+    @Output('anOutput')
+    public outputAction: EventEmitter<IAction>;
 
     public property: string;
 

@@ -1,23 +1,15 @@
-import * as ts from 'typescript';
-import * as fs from 'fs';
+import * as TsTypeInfo from 'ts-type-info';
 import { Component } from './classes/Component';
+import { Nullable } from './interfaces/Nullable';
 
-let fileName = './example/component.ts';
-const program = ts.createProgram([fileName], {});
-let sourceFile = ts.createSourceFile(fileName, fs.readFileSync(fileName).toString(), ts.ScriptTarget.ES2015, true);
+const result = TsTypeInfo.getInfoFromFiles(['example/component.ts']);
 
-delint(sourceFile);
-//console.log(ts.SyntaxKind);
-function delint(sourceFile) {
-    delintNode(sourceFile);
+result.files.forEach((file) => {
+    file.classes.forEach((element) => {
+        let component: Nullable<Component> = Component.fromClass(element);
 
-    function delintNode(node) {
-        // console.log(node.kind, ts.SyntaxKind[node.kind]);
-        if (node.kind === ts.SyntaxKind.ClassDeclaration) {
-            let component = new Component(node, program.getTypeChecker());
-            // console.log(component);
+        if (component) {
+            console.log(component);
         }
-
-        ts.forEachChild(node, delintNode);
-    }
-}
+    });
+});

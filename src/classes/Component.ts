@@ -1,79 +1,71 @@
-import * as ts from 'typescript';
+import { ClassDefinition, ClassPropertyDefinition, DecoratorDefinition } from 'ts-type-info';
+import { DecoratorNames } from '../const/DecoratorNames';
+import { Nullable } from '../interfaces/Nullable';
+import { Input } from './Input';
+import { Output } from './Output';
 
 export class Component {
-    public name: string;
-    public selector: string;
-    public template: string;
-    public inputs: Array<string>;
+    public inputs: Array<Input>;
+    public outputs: Array<Output>;
 
-    private _node: ts.ClassDeclaration;
-    private _typeChecker: ts.TypeChecker
-
-    constructor(node: ts.ClassDeclaration, typeChecker: ts.TypeChecker) {
-        this._node = node;
-        this._typeChecker = typeChecker;
-        this.name = node.name.text;
+    protected constructor(element: ClassDefinition) {
         this.inputs = [];
+        this.outputs = [];
 
-        this._extractComponentDefinition(node.decorators);
-        this._extractInputs(node.members);
+        this.parseAPI(element.properties);
     }
 
-    private _extractInputs(members: ts.NodeArray<ts.ClassElement>) {
-        members.forEach((member: ts.ClassElement) => {
-            if (!member.decorators) {
-                return;
+    private parseAPI(properties: Array<ClassPropertyDefinition>) {
+        properties.forEach((property: ClassPropertyDefinition) => {
+            if (Component.hasInputDecorator(property)) {
+                this.inputs.push(new Input(property));
             }
 
-            member.decorators.forEach((decorator: ts.Decorator) => {
-                ts.forEachChild(decorator, (call: ts.CallExpression) => {
-                    if (call.expression.getText() === 'Input') {
-                        let inputName: string = member.name.getText();
-
-                        call.arguments.forEach((argument: ts.StringLiteral) => {
-                            inputName = argument.text;
-                        });
-
-                        this.inputs.push(inputName);
-                        console.log(inputName);
-                        console.log(this._typeChecker.getTypeFromTypeNode((member as ts.PropertyDeclaration).type));
-                    }
-                });
-            });
+            if (Component.hasOutputDecorator(property)) {
+                this.outputs.push(new Output(property));
+            }
         });
-
-        console.log(this.inputs);
     }
 
-    private _extractComponentDefinition(decorators: ts.NodeArray<ts.Decorator>) {
-        decorators.forEach((decorator: ts.Decorator) => {
-            ts.forEachChild(decorator, (call: ts.CallExpression) => {
-                if (call.expression.getText() !== 'Component') {
-                    return;
-                }
+    public static fromClass(element: ClassDefinition): Nullable<Component> {
+        if (this.hasComponentDecorator(element)) {
+            return new Component(element);
+        }
+    }
 
-                call.arguments.forEach((argument: ts.ObjectLiteralExpression) => {
-                    argument.properties.forEach((property: ts.PropertyAssignment) => {
-                        let propertyName: string = property.name.getText();
+    private static hasInputDecorator(property: ClassPropertyDefinition): boolean {
+        let hasInputDecorator: boolean = false;
 
-                        if (propertyName === 'selector') {
-                            ts.forEachChild(property, (value: ts.StringLiteral | ts.Identifier) => {
-                                if (ts.SyntaxKind.StringLiteral === value.kind) {
-                                    this.selector = value.text;
-                                }
-                            })
-                        }
-
-                        if (propertyName === 'template') {
-                            ts.forEachChild(property, (value: ts.TemplateLiteral | ts.Identifier) => {
-                                if (ts.SyntaxKind.FirstTemplateToken === value.kind) {
-                                    this.template = value.text;
-                                }
-                            })
-                        }
-                    })
-                })
-            });
+        property.decorators.forEach((decorator: DecoratorDefinition) => {
+            if (decorator.name === DecoratorNames.INPUT) {
+                hasInputDecorator = true;
+            }
         });
+
+        return hasInputDecorator;
+    }
+
+    private static hasOutputDecorator(property: ClassPropertyDefinition): boolean {
+        let hasOutputDecorator: boolean = false;
+
+        property.decorators.forEach((decorator: DecoratorDefinition) => {
+            if (decorator.name === DecoratorNames.OUTPUT) {
+                hasOutputDecorator = true;
+            }
+        });
+
+        return hasOutputDecorator;
+    }
+
+    private static hasComponentDecorator(element: ClassDefinition): boolean {
+        let hasComponentDecorator: boolean = false;
+
+        element.decorators.forEach((decorator: DecoratorDefinition) => {
+            if (decorator.name === DecoratorNames.COMPONENT) {
+                hasComponentDecorator = true;
+            }
+        });
+
+        return hasComponentDecorator;
     }
 }
