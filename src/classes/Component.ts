@@ -1,6 +1,5 @@
 import { ClassDefinition, ClassPropertyDefinition, DecoratorDefinition } from 'ts-type-info';
 import { DecoratorNames } from '../const/DecoratorNames';
-import { Nullable } from '../interfaces/Nullable';
 import { Input } from './Input';
 import { Output } from './Output';
 
@@ -27,10 +26,20 @@ export class Component {
         });
     }
 
-    public static fromClass(element: ClassDefinition): Nullable<Component> {
-        if (this.hasComponentDecorator(element)) {
-            return new Component(element);
-        }
+    public static fromClass(element: ClassDefinition): Component {
+        return new Component(element);
+    }
+
+    public static isComponent(element: ClassDefinition): boolean {
+        let hasComponentDecorator: boolean = false;
+
+        element.decorators.forEach((decorator: DecoratorDefinition) => {
+            if (decorator.name === DecoratorNames.COMPONENT) {
+                hasComponentDecorator = true;
+            }
+        });
+
+        return hasComponentDecorator;
     }
 
     private static hasInputDecorator(property: ClassPropertyDefinition): boolean {
@@ -55,17 +64,5 @@ export class Component {
         });
 
         return hasOutputDecorator;
-    }
-
-    private static hasComponentDecorator(element: ClassDefinition): boolean {
-        let hasComponentDecorator: boolean = false;
-
-        element.decorators.forEach((decorator: DecoratorDefinition) => {
-            if (decorator.name === DecoratorNames.COMPONENT) {
-                hasComponentDecorator = true;
-            }
-        });
-
-        return hasComponentDecorator;
     }
 }

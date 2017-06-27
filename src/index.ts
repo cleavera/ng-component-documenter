@@ -6,10 +6,8 @@ const result = TsTypeInfo.getInfoFromFiles(['example/component.ts']);
 
 result.files.forEach((file) => {
     file.classes.forEach((element) => {
-        let component: Nullable<Component> = Component.fromClass(element);
-
-        if (component) {
-            console.log(component);
+        if (Component.isComponent(element)) {
+            console.log(Component.fromClass(element));
         }
     });
 });
