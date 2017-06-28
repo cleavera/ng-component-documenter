@@ -2,21 +2,12 @@ import { InterfaceDefinition, InterfaceMethodDefinition, InterfacePropertyDefini
 
 import { Dict, Nullable } from '../../../interfaces';
 
-import { AnyType } from './Any';
+import { NativeTypes } from '../services';
+
 import { BaseType } from './BaseType';
-import { BooleanType } from './Boolean';
 import { FunctionType } from './Function';
-import { NumberType } from './Number';
-import { StringType } from './String';
 
 export class Type extends BaseType {
-    public static NativeTypes: Array<typeof BaseType> = [
-        AnyType,
-        BooleanType,
-        NumberType,
-        StringType
-    ];
-
     public property: Dict<BaseType>;
     public method: Dict<FunctionType>;
 
@@ -56,7 +47,7 @@ export class Type extends BaseType {
     public static fromTypeDef(type: TypeDefinition): BaseType {
         let out: Nullable<BaseType> = null;
 
-        this.NativeTypes.forEach((NativeType: typeof BaseType): void => {
+        NativeTypes.forEach((NativeType: typeof BaseType): void => {
             if (NativeType.isType(type)) {
                 out = new NativeType(type);
             }
