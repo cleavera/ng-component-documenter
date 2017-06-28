@@ -170,7 +170,7 @@
     "completed-docs": false,
     "file-header": false,
     "import-spacing": true,
-    "interface-name": true,
+    "interface-name": false,
     "interface-over-type-literal": true,
     "jsdoc-format": false,
     "match-default-export-name": true,

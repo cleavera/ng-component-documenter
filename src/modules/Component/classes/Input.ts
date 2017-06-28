@@ -13,7 +13,6 @@ export class Input {
     constructor(property: ClassPropertyDefinition) {
         this.name = Input.getName(property);
         this.type = Type.fromTypeDef(property.type);
-        console.log(this.name, this.type.name, this.type.generateValue());
     }
 
     private static getName(property: ClassPropertyDefinition): string {
