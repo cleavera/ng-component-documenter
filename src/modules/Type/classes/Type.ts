@@ -1,15 +1,12 @@
-import {
-    InterfaceDefinition, InterfaceMethodDefinition, InterfacePropertyDefinition,
-    TypeDefinition
-} from 'ts-type-info';
-import { Dict, Nullable } from '../interfaces';
+import { InterfaceDefinition, InterfaceMethodDefinition, InterfacePropertyDefinition, TypeDefinition } from 'ts-type-info';
+import { Dict, Nullable } from '../../../interfaces';
 import { AnyType } from './Any';
 import { ArrayType } from './Array';
 import { BaseType } from './BaseType';
 import { BooleanType } from './Boolean';
+import { FunctionType } from './Function';
 import { NumberType } from './Number';
 import { StringType } from './String';
-import { FunctionType } from './Function';
 
 export class Type extends BaseType {
     public static NativeTypes: Array<typeof BaseType> = [

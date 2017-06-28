@@ -1,5 +1,5 @@
 import { InterfaceMethodDefinition } from 'ts-type-info';
-import { ValueGenerator } from '../interfaces/ValueGenerator';
+import { ValueGenerator } from '../interfaces';
 import { BaseType } from './BaseType';
 import { Type } from './Type';
 

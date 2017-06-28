@@ -1,5 +1,5 @@
 import { TypeDefinition } from 'ts-type-info';
-import { ValueGenerator } from '../interfaces/ValueGenerator';
+import { ValueGenerator } from '../interfaces';
 
 export class BaseType implements ValueGenerator {
     public name: string;

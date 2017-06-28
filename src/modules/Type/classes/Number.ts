@@ -1,5 +1,5 @@
-import { BaseType } from './BaseType';
 import { TypeDefinition } from 'ts-type-info';
+import { BaseType } from './BaseType';
 
 export class NumberType extends BaseType {
     public generateValue(): number {
