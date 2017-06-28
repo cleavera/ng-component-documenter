@@ -1,4 +1,5 @@
 import { TypeDefinition } from 'ts-type-info';
+
 import { BaseType } from './BaseType';
 import { Type } from './Type';
 

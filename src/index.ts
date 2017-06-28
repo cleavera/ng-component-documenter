@@ -1,4 +1,5 @@
 import * as TsTypeInfo from 'ts-type-info';
+
 import { Component } from './modules/Component';
 
 const result: TsTypeInfo.GlobalDefinition = TsTypeInfo.getInfoFromFiles(['example/component.ts']);

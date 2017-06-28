@@ -1,5 +1,7 @@
 import { InterfaceDefinition, InterfaceMethodDefinition, InterfacePropertyDefinition, TypeDefinition } from 'ts-type-info';
+
 import { Dict, Nullable } from '../../../interfaces';
+
 import { AnyType } from './Any';
 import { ArrayType } from './Array';
 import { BaseType } from './BaseType';
