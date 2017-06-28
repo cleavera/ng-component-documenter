@@ -1,6 +1,7 @@
 import { TypeDefinition } from 'ts-type-info';
+import { ValueGenerator } from '../interfaces/ValueGenerator';
 
-export class BaseType {
+export class BaseType implements ValueGenerator {
     public name: string;
 
     protected constructor(type: TypeDefinition) {

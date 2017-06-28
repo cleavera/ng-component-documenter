@@ -1,4 +1,7 @@
-import { InterfaceDefinition, InterfacePropertyDefinition, TypeDefinition } from 'ts-type-info';
+import {
+    InterfaceDefinition, InterfaceMethodDefinition, InterfacePropertyDefinition,
+    TypeDefinition
+} from 'ts-type-info';
 import { Dict, Nullable } from '../interfaces';
 import { AnyType } from './Any';
 import { ArrayType } from './Array';
@@ -6,6 +9,7 @@ import { BaseType } from './BaseType';
 import { BooleanType } from './Boolean';
 import { NumberType } from './Number';
 import { StringType } from './String';
+import { FunctionType } from './Function';
 
 export class Type extends BaseType {
     public static NativeTypes: Array<typeof BaseType> = [
@@ -17,10 +21,12 @@ export class Type extends BaseType {
     ];
 
     public property: Dict<BaseType>;
+    public method: Dict<FunctionType>;
 
     protected constructor(type: TypeDefinition) {
         super(type);
         this.property = {};
+        this.method = {};
         this.parseInterface(type);
     }
 
@@ -29,6 +35,10 @@ export class Type extends BaseType {
 
         Object.keys(this.property).forEach((propertyName: string) => {
             out[propertyName] = this.property[propertyName].generateValue();
+        });
+
+        Object.keys(this.method).forEach((methodName: string) => {
+            out[methodName] = this.method[methodName].generateValue();
         });
 
         return out;
@@ -40,9 +50,9 @@ export class Type extends BaseType {
                 this.property[property.name] = Type.fromTypeDef(property.type);
             });
 
-            // interfaceDefinition.methods.forEach((method: InterfaceMethodDefinition) => {
-                // console.log(method);
-            // });
+            interfaceDefinition.methods.forEach((method: InterfaceMethodDefinition) => {
+                this.method[method.name] = new FunctionType(method);
+            });
         });
     }
 
