@@ -15,11 +15,20 @@ export class MyComponent implements OnInit {
     @Input()
     public action: IAction;
 
+    @Input()
+    public actions: Array<IAction>;
+
+    @Input()
+    public complexArray: [string, number, any];
+
     @Input('anInput')
     public input: any;
 
     @Input()
     public stringInput: string;
+
+    @Input()
+    public multiStringInput: Array<string>;
 
     @Input()
     public set myProperty(value: string) {

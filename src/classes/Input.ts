@@ -1,13 +1,17 @@
 import { ClassPropertyDefinition, DecoratorDefinition, ExpressionDefinition } from 'ts-type-info';
 import { DecoratorNames } from '../const/DecoratorNames';
-import { Nullable } from '../interfaces/Nullable';
+import { Nullable } from '../interfaces';
+import { BaseType } from './BaseType';
+import { Type } from './Type';
 
 export class Input {
     public name: string;
-    public type: string;
+    public type: BaseType;
 
     constructor(property: ClassPropertyDefinition) {
         this.name = Input.getName(property);
+        this.type = Type.fromTypeDef(property.type);
+        console.log(this.name, this.type.name, this.type.generateValue());
     }
 
     private static getName(property: ClassPropertyDefinition): string {

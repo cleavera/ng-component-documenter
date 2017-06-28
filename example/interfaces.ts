@@ -1,6 +1,6 @@
 export interface IAction {
-    action(): void;
     label: string;
+    action(): void;
 }
 
 export interface IModal {
@@ -14,7 +14,11 @@ export interface IMessage {
 export class Message {
     private _messages: Array<IMessage>;
 
-    add(message: IMessage): void {
+    public add(message: IMessage): void {
         this._messages.push(message);
     };
+
+    public get(): Array<IMessage> {
+        return this._messages;
+    }
 }
