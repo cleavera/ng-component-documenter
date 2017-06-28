@@ -3,7 +3,6 @@ import { InterfaceDefinition, InterfaceMethodDefinition, InterfacePropertyDefini
 import { Dict, Nullable } from '../../../interfaces';
 
 import { AnyType } from './Any';
-import { ArrayType } from './Array';
 import { BaseType } from './BaseType';
 import { BooleanType } from './Boolean';
 import { FunctionType } from './Function';
@@ -13,7 +12,6 @@ import { StringType } from './String';
 export class Type extends BaseType {
     public static NativeTypes: Array<typeof BaseType> = [
         AnyType,
-        ArrayType,
         BooleanType,
         NumberType,
         StringType
