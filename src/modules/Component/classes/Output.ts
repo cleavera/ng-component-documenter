@@ -1,6 +1,8 @@
 import { ClassPropertyDefinition, DecoratorDefinition, ExpressionDefinition } from 'ts-type-info';
-import { DecoratorNames } from '../const/DecoratorNames';
-import { Nullable } from '../interfaces';
+
+import { Nullable } from '../../../interfaces';
+
+import { DecoratorNames } from '../constants';
 
 export class Output {
     public name: string;

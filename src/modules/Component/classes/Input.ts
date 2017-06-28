@@ -1,7 +1,10 @@
 import { ClassPropertyDefinition, DecoratorDefinition, ExpressionDefinition } from 'ts-type-info';
-import { DecoratorNames } from '../const/DecoratorNames';
-import { Nullable } from '../interfaces';
-import { BaseType, Type } from '../modules/Type';
+
+import { Nullable } from '../../../interfaces';
+
+import { BaseType, Type } from '../../Type';
+
+import { DecoratorNames } from '../constants';
 
 export class Input {
     public name: string;

@@ -1,6 +1,7 @@
 import { DecoratorDefinition, ExpressionDefinition } from 'ts-type-info';
-import { DecoratorNames } from '../const/DecoratorNames';
-import { NotAComponentDecoratorError } from '../errors/NotAComponentDecoratorError';
+
+import { DecoratorNames } from '../constants';
+import { NotAComponentDecoratorError } from '../errors';
 
 export class Template {
     public raw: string;

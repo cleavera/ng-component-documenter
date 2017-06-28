@@ -1,7 +1,10 @@
 import { ClassDefinition, ClassPropertyDefinition, DecoratorDefinition, ExpressionDefinition } from 'ts-type-info';
-import { DecoratorNames } from '../const/DecoratorNames';
-import { NotAComponentError } from '../errors/NotAComponentError';
-import { Nullable } from '../interfaces';
+
+import { Nullable } from '../../../interfaces';
+
+import { DecoratorNames } from '../constants';
+import { NotAComponentError } from '../errors';
+
 import { Input } from './Input';
 import { Output } from './Output';
 import { Template } from './Template';
