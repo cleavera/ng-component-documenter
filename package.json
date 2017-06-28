@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "example": "ts-node example",
+    "compile": "tsc",
+    "example": "npm run compile && ts-node --project example example",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Anthony Cleaver",

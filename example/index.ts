@@ -1,3 +1,3 @@
-import { ngComponentDocumenter } from '../src/index';
+import { ngComponentDocumenter } from '../dist';
 
 ngComponentDocumenter('example/**/*.ts');
