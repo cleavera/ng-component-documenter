@@ -1,3 +1,5 @@
+import { isFunction, isNull, isUndefined } from 'lodash';
+
 import { Dict } from '../../../interfaces';
 
 import { Serializable } from '../interfaces/Serializable';
@@ -24,6 +26,30 @@ export class List implements Serializable {
     }
 
     public serialize(): string {
-        return JSON.stringify(this);
+        let out: string = '{';
+
+        Object.keys(this).forEach((key: string) => {
+            if (isFunction(this[key]) || isNull(this[key]) || isUndefined(this[key])) {
+                return;
+            }
+
+            if (isFunction(this[key].serialize)) {
+                out += `"${key}": ${this[key].serialize()},`;
+            } else if (key === 'data') {
+                out += `"${key}": [`;
+
+                this[key].forEach((datum: Item) => {
+                    out += `${datum.serialize()},`;
+                });
+
+                out += '],';
+            } else {
+                out += `"${key}": ${JSON.stringify(this[key])},`;
+            }
+        });
+
+        out += '}';
+
+        return out.replace(/,]/g, ']');
     }
 }

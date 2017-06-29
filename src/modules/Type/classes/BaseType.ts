@@ -9,6 +9,10 @@ export class BaseType implements ValueGenerator {
         this.name = type.text;
     }
 
+    public get example(): any {
+        return this.generateValue();
+    }
+
     public generateValue(): any {
         return null;
     }
