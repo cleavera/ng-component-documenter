@@ -12,22 +12,23 @@ export function ngComponentDocumenter(globPattern: string): void {
     Log(`Looking for files`);
     glob(globPattern, (err: Error, files: Array<string>) => {
         Log(`${files.length} files found`);
-        Log(`Compiling project`);
-        const result: TsTypeInfo.GlobalDefinition = TsTypeInfo.getInfoFromFiles(files);
-        Log(`Project compiled`);
 
-        result.files.forEach((file: TsTypeInfo.FileDefinition) => {
-            Log(`Parsing ${file.fileName}`);
-            file.classes.forEach((element: TsTypeInfo.ClassDefinition) => {
-                if (Component.isComponent(element)) {
-                    const component: Component = Component.fromClass(element);
+        files.forEach((file: string) => {
+            Log(`Documenting ${file}`);
+            const result: TsTypeInfo.GlobalDefinition = TsTypeInfo.getInfoFromFiles([file]);
 
-                    if (!fs.existsSync(dir)){
-                        fs.mkdirSync(dir);
+            result.files.forEach((file: TsTypeInfo.FileDefinition) => {
+                file.classes.forEach((element: TsTypeInfo.ClassDefinition) => {
+                    if (Component.isComponent(element)) {
+                        const component: Component = Component.fromClass(element);
+
+                        if (!fs.existsSync(dir)){
+                            fs.mkdirSync(dir);
+                        }
+
+                        fs.writeFileSync(`${dir}/${component.selector}.json`, TreeFactory.parseTree(component, 'component').serialize());
                     }
-
-                    fs.writeFileSync(`${dir}/${component.selector}.json`, TreeFactory.parseTree(component, 'component').serialize());
-                }
+                });
             });
         });
     });
