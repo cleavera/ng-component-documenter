@@ -4,13 +4,11 @@ import { ValueGenerator } from '../interfaces';
 
 export class BaseType implements ValueGenerator {
     public name: string;
+    public example: any;
 
     protected constructor(type: TypeDefinition) {
         this.name = type.text;
-    }
-
-    public get example(): any {
-        return this.generateValue();
+        this.example = JSON.stringify(this.generateValue());
     }
 
     public generateValue(): any {

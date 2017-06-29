@@ -9,17 +9,16 @@ export class ArrayType extends BaseType {
     constructor(type: TypeDefinition) {
         super(type);
 
-        this.types = [];
-        if (type.arrayElementType) {
-            this.types.push(Type.fromTypeDef(type.arrayElementType));
-        } else {
-            type.typeArguments.forEach((arrayItemType: TypeDefinition) => {
-                this.types.push(Type.fromTypeDef(arrayItemType));
-            });
-        }
+        this.parseTypes(type);
+
+        this.example = JSON.stringify(this.generateValue());
     }
 
     public generateValue(): Array<any> {
+        if (!this.types) {
+            return [];
+        }
+
         const out: Array<any> = [];
 
         this.types.forEach((type: BaseType) => {
@@ -27,6 +26,18 @@ export class ArrayType extends BaseType {
         });
 
         return out;
+    }
+
+    private parseTypes(type: TypeDefinition): void {
+        this.types = [];
+
+        if (type.arrayElementType) {
+            this.types.push(Type.fromTypeDef(type.arrayElementType));
+        } else {
+            type.typeArguments.forEach((arrayItemType: TypeDefinition) => {
+                this.types.push(Type.fromTypeDef(arrayItemType));
+            });
+        }
     }
 
     public static isType(type: TypeDefinition): boolean {

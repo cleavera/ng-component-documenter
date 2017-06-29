@@ -16,9 +16,14 @@ export class Type extends BaseType {
         this.property = {};
         this.method = {};
         this.parseInterface(type);
+        this.example = JSON.stringify(this.generateValue());
     }
 
     public generateValue(): any {
+        if (!this.property) {
+            return null;
+        }
+
         const out: any = {};
 
         Object.keys(this.property).forEach((propertyName: string) => {
